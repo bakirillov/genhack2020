@@ -11,10 +11,11 @@ from tensorly.tucker_tensor import tucker_to_tensor
 
 tl.set_backend('pytorch')
 
+
 class NeuralTensorLayer(torch.nn.Module):
     
     """
-    This is the class for 
+    This is the class for the Neural Tensor Layer
     """
     
     def __init__(self, order, input_dim, output_dim, rank_tucker=-1,
