@@ -41,10 +41,13 @@ def run_binning(args):
         cosine_ds.extend(
             [cosine(c,d) for c,d in zip(x1.cpu().data.numpy(), x2.cpu().data.numpy())]
         )
-        z1 = model(x1)
-        z2 = model(x2)
-        d = F.pairwise_distance(z1, z2)
-        distances.extend(d.cpu().data.numpy())
+        distances.extend(
+            [
+                cosine(c,d) for c,d in zip(
+                    model(x1).cpu().data.numpy(), model(x2).cpu().data.numpy()
+                )
+            ]
+        )
         print(str(len(distances))+" out of "+str(len(ds.ds)**2))
     distances = np.array(distances).reshape((len(ds.ds),len(ds.ds)))
     np.save("distances.npl", distances)
