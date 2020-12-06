@@ -8,6 +8,8 @@ import torch
 import itertools
 import numpy as np
 from Bio import SeqIO
+from sampler import *
+from tqdm import tqdm
 import pytorch_lightning as pl
 from gensim.models import KeyedVectors
 from scipy.spatial.distance import cosine
@@ -156,14 +158,23 @@ class dna2vecDataModule(pl.LightningDataModule):
         )
         
     def train_dataloader(self):
+        y = []
+        tl = DataLoader(
+            self.train, batch_size=self.batch_size,
+            shuffle=False
+        )
+        for a in tqdm(tl):
+            y.extend(a[1])
+        y = torch.Tensor(y).type(torch.LongTensor)
         self.train_loader = DataLoader(
-            self.train, shuffle=True, batch_size=self.batch_size
+            self.train, batch_size=self.batch_size,
+            sampler=BalancedBatchSampler(self.train, labels=y)
         )
         return(self.train_loader)
     
     def test_dataloader(self):
         self.test_loader = DataLoader(
-            self.test, shuffle=False, batch_size=self.batch_size
+            self.test, shuffle=False, batch_size=self.batch_size,
         )
         return(self.test_loader)
     
