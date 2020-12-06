@@ -1,0 +1,9 @@
+__pycache__/*
+dna2vec/*
+dna2vec
+checkpoints
+__pycache__
+checkpoints/*
+src/.ipynb_checkpoints/*
+src/.ipynb_checkpoints
+
